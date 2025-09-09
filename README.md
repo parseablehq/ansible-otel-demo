@@ -4,15 +4,15 @@ Minimal setup to collect Ansible playbook telemetry (traces and logs) via an Ope
 
 ## Assets
 
-- Collector config: [/blogs/static/ansible-otel-demo/otel-config.yaml](/blogs/static/ansible-otel-demo/otel-config.yaml)
-- Compose to run the Collector: [/blogs/static/ansible-otel-demo/compose.yaml](/blogs/static/ansible-otel-demo/compose.yaml)
-- Environment template: [/blogs/static/ansible-otel-demo/.env.example](/blogs/static/ansible-otel-demo/.env.example)
-- Ansible callback plugin: [/blogs/static/ansible-otel-demo/ansible/callback_plugins/otel.py](/blogs/static/ansible-otel-demo/ansible/callback_plugins/otel.py)
+- Collector config: [otel-config.yaml](./otel-config.yaml)
+- Compose to run the Collector: [compose.yaml](./compose.yaml)
+- Environment template: [env.example](./env.example)
+- Ansible callback plugin: [ansible/callback_plugins/otel.py](./ansible/callback_plugins/otel.py)
 - Ansible project scaffolding:
-  - [/blogs/static/ansible-otel-demo/ansible/ansible.cfg](/blogs/static/ansible-otel-demo/ansible/ansible.cfg)
-  - [/blogs/static/ansible-otel-demo/ansible/inventory.ini](/blogs/static/ansible-otel-demo/ansible/inventory.ini)
-  - [/blogs/static/ansible-otel-demo/ansible/site.yml](/blogs/static/ansible-otel-demo/ansible/site.yml)
-  - [/blogs/static/ansible-otel-demo/ansible/requirements.txt](/blogs/static/ansible-otel-demo/ansible/requirements.txt)
+  - [ansible/ansible.cfg](./ansible/ansible.cfg)
+  - [ansible/inventory.ini](./ansible/inventory.ini)
+  - [ansible/site.yml](./ansible/site.yml)
+  - [ansible/requirements.txt](./ansible/requirements.txt)
 
 Repo paths for quick reference:
 
@@ -39,4 +39,3 @@ Repo paths for quick reference:
    - `ansible-playbook -i ansible/inventory.ini ansible/site.yml`
 
 The Collector listens on OTLP gRPC `:4317` and HTTP `:4318`. The Ansible callback plugin defaults to sending logs and traces to `http://localhost:4318/v1/logs` and `/v1/traces`. You can override via `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT` and `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` if needed.
-
