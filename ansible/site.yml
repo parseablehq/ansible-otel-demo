@@ -1,0 +1,21 @@
+---
+- name: Ansible + OpenTelemetry demo
+  hosts: local
+  gather_facts: false
+
+  tasks:
+    - name: Ping localhost
+      ansible.builtin.ping:
+
+    - name: Echo a message
+      ansible.builtin.shell: |
+        echo "Hello from Ansible + OpenTelemetry"
+
+    - name: Intentional skip example
+      ansible.builtin.debug:
+        msg: "This may be skipped"
+      when: false
+
+    - name: Intentional failure example
+      ansible.builtin.command: /bin/false
+      ignore_errors: true

@@ -1,0 +1,68 @@
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: 0.0.0.0:4318
+      grpc:
+        endpoint: 0.0.0.0:4317
+
+processors:
+  batch:
+    timeout: 10s
+  resource:
+    attributes:
+      - key: service.name
+        value: ${env:OTEL_SERVICE_NAME}
+        action: upsert
+
+exporters:
+  # Traces -> Parseable (JSON)
+  otlphttp/parseabletraces:
+    endpoint: ${env:PARSEABLE_ENDPOINT}
+    encoding: json
+    headers:
+      Authorization: "Basic ${env:PARSEABLE_BASIC_AUTH_B64}"
+      X-P-Stream: ${env:PARSEABLE_TRACES_STREAM}
+      X-P-Log-Source: otel-traces
+      Content-Type: application/json
+    tls:
+      insecure: true
+
+  # Logs -> Parseable (JSON)
+  otlphttp/parseablelogs:
+    endpoint: ${env:PARSEABLE_ENDPOINT}
+    encoding: json
+    headers:
+      Authorization: "Basic ${env:PARSEABLE_BASIC_AUTH_B64}"
+      X-P-Stream: ${env:PARSEABLE_LOGS_STREAM}
+      X-P-Log-Source: otel-logs
+      Content-Type: application/json
+    tls:
+      insecure: true
+
+  # Metrics -> Parseable (JSON)
+  otlphttp/parseablemetrics:
+    endpoint: ${env:PARSEABLE_ENDPOINT}
+    encoding: json
+    headers:
+      Authorization: "Basic ${env:PARSEABLE_BASIC_AUTH_B64}"
+      X-P-Stream: ${env:PARSEABLE_METRICS_STREAM}
+      X-P-Log-Source: otel-metrics
+      Content-Type: application/json
+    tls:
+      insecure: true
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlphttp/parseabletraces]
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlphttp/parseablelogs]
+    metrics:
+      receivers: [otlp]
+      processors: [resource, batch]
+      exporters: [otlphttp/parseablemetrics]
